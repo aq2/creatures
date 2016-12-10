@@ -1,36 +1,52 @@
-// this is the main javascript function that controls all the others
-// holds global variables and calls section as necessary
-
-var wide = window.innerWidth;
-var high = window.innerHeight;
-
-// setup the population section
-var popSketch = function (p) {
-    p.setup = function () {
-        p.createCanvas(wide/3, high/2-3);
-        p.background(200);
-        // p.rectMode(CORNER);
-        p.fill(255);
-        p.textSize(26);
-        p.text('Population', 10, 25);
-        p.textSize(16);
-    };
-
-    p.draw = function () {
-
-        genPopBtn = p.createButton('Create random population');
-        genPopBtn.position(5,35);
-        var doPop = function (p) {
-            alert('foo');
-            p.text('doggy', 50, 50);
-        };
-        genPopBtn.mouseClicked(doPop);
-
-    };
-
-
-
+var globals = {
+    bitlength: 10,                  // number of creature segments
+    populationSize: 10,             // number of creatures in population
+    creatures: [],                  // array to store our population
+    // initialGreenChance: 0.2,     // probability of green segments
+    mummy: -1,                      // array index of first parent
+    daddy: -1,                      // array index of second parent
+    locus: -1,                      // crossover segment
+    firstRun: true                  // true if first time run
 };
 
-new p5(popSketch, "pop");
+// setup and draw blank canvas and define colours
+function setup() {
+    hImg = createImage('highlight.png');
+    // globals.width = windowWidth-5;
+    // globals.height = windowHeight-5;
+    // defineColours();
+    var rhino = color(60, 70, 80);
+    var celery = color(200, 200, 80);
+    var black = color(0);
+    var white = color(255);
 
+    rectMode(CORNER);
+    createCanvas(windowWidth-5, windowHeight-5);
+    noStroke();
+
+    // // 'header'
+    // fill(rhino);
+    // rect(0,0, 100, 200);
+
+    population.draw();
+
+}
+
+function draw() {
+
+    // var population = new Section({
+    //     originX: 0,
+    //     originY: 0,
+    //     highlighted: true,
+    //     title: 'Population',
+    //     width: (windowWidth-5)/3,
+    //     height: (windowHeight-5)/2
+    // });
+
+
+    // draw rectangle around pop
+    // stroke(6);
+    // fill(0,0,0,0);
+    // rect(0, 0, 340, 450);
+    // noStroke();
+}

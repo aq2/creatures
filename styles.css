@@ -2,51 +2,29 @@
 
 html,
 body {
-    /*height: 100%;*/
     margin: 0;
     padding: 0;
     background: #774;
 }
 
-div,
-canvas {
-    margin: 0;
-    padding: 0;
-}
-
-
 button {
-    color: #fff;
-    background-color: #6496c8;
-    border: none;
-    border-radius: 15px;
-    box-shadow: 0 10px #27496d;
-}
-
-button:hover,
-button.hover {
-    background-color: #417cb8
-}
-
-button:active,
-button.active {
-    background-color: #417cb8;
-    box-shadow: 0 2px #27496d;
-    transform: translateY(1px);
-}
-
-button {
-    display: inline-block;
-    margin: 0 10px 0 0;
-    padding: 5px 5px;
+    border: 0;
     font-size: 16px;
-    /*font-family: "Bitter",serif;*/
-    /*line-height: 0.5;*/
-    appearance: none;
-    box-shadow: none;
+    cursor: pointer;
+    padding: 5px 5px;
     border-radius: 5px;
+    display: inline-block;
+    background-color: #417cb8;
 }
 
-button:focus {
-    outline: none
+button:hover {
+    background-color: mediumpurple;
+}
+
+button:active {
+    background-color: red;
+}
+
+button::-moz-focus-inner {
+    border: 0 !important;
 }

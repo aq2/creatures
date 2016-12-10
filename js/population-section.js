@@ -1,49 +1,65 @@
 var population = new Section({
-    x: 0,
-    y: 0,
-    highlighted: true,
+    originX: 0,
+    originY: 0,
     title: 'Population',
-    width: 1/3,  
-    height: 1/2
+    relativeWidth: 1/3,
+    relativeHeight: 1/2,
+    buttonLabel: 'generate random population',
+    buttonX: 0,
+    buttonY: 50,
+    buttonAction: doPop,
+    sliderLabel: 'P(green)',
+    sliderMin: 0.1,
+    sliderMax: 0.7,
+    sliderInitialValue: 0.3,
+    sliderTickSize: 0.1,
+    sliderValueWidth: 30
 });
 
 
-function populate() {  // should this be populate-draw?
-    // globals.firstRun = false;
-    // silder for green proportion?
-    var x = 0;
-    var y = 0;
-    genPopBtn = createButton('Create random population');
-    genPopBtn.position(x + 30, y + 45);
-    genPopBtn.mouseClicked(doPop);
-}
+// function populate() {  // should this be populate-draw?
+//     // globals.firstRun = false;
+//     // silder for green proportion?
+//     var originX = 0;
+//     var originY = 0;
+//     genPopBtn = createButton('Create random population');
+//     genPopBtn.position(originX + 30, originY + 45);
+//     genPopBtn.mouseClicked(doPop);
+// }
 
 function doPop() {
-    // print(globals.firstRun);
-    if (globals.firstRun === false) {
-        if (!confirm("This will start again from scratch - are you sure?")) {
-            return;
-        }
-    }
-    globals.firstRun = false;
-    setup();
-    population.highlighted = false;
-    population.draw();
-    generateRandomCreatures();
-    displayPopulation();
-    // tournament();
-    // var tournament = new Section({
-    //     x: 350,
-    //     y: 0,
-    //     highlighted: true,
-    //     title: 'Tournament',
-    //     width: 800,
-    //     height: 450,
-    //     buttonX: this.x + 200,
-    //     buttonY: this.y + 30
-// }); 
-    tourney();
-    // tournament.draw();
+    // population.actionButton.hide();
+    print(population.title);
+    // population.highlighted = false;
+    population.highlightImg.hide();
+    // hImg.hide();
+    // image(highlightImg, 0, 0);
+
+//     // print(globals.firstRun);
+//     if (globals.firstRun === false) {
+//         if (!confirm("This will start again from scratch - are you sure?")) {
+//             return;
+//         }
+//     }
+//     globals.firstRun = false;
+//     setup();
+//     population.highlighted = false;
+//     population.draw();
+//     generateRandomCreatures();
+//     displayPopulation();
+//     // tournament();
+//     // var tournament = new Section({
+//     //     originX: 350,
+//     //     originY: 0,
+//     //     highlighted: true,
+//     //     title: 'Tournament',
+//     //     width: 800,
+//     //     height: 450,
+//     //     buttonX: this.originX + 200,
+//     //     buttonY: this.originY + 30
+// // });
+//     tourney();
+//     // tournament.draw();
 }
 
 

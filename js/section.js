@@ -1,47 +1,83 @@
 var Section = function(config) {
-    this.x = config.x;
-    this.y = config.y;
-    this.highlighted = config.highlighted;
+    this.originX = config.originX;
+    console.log(this.originX);
+    this.originY = config.originY;
     this.title = config.title;
-    this.width = config.width;
-    this.height = config.height;
-    this.backgroundColour = config.backgroundColour;
-    this.buttonName = this.title + 'Btn';
+    this.relativeWidth = config.relativeWidth;
+    this.relativeHeight = config.relativeHeight;
+    // this.backgroundColour = config.backgroundColour;
+    // this.buttonName = this.title + 'Btn';
     this.buttonLabel = config.buttonLabel;
-    this.buttonX = this.x + config.buttonX;
-    this.buttonY = this.y + config.buttonY;
+    this.buttonX = this.originX + config.buttonX;
+    this.buttonY = this.originY + config.buttonY;
+    this.buttonAction = config.buttonAction;
+    this.sliderLabel = config.sliderLabel;
+    this.sliderMin = config.sliderMin;
+    this.sliderMax = config.sliderMax;
+    this.sliderInitialValue = config.sliderInitialValue;
+    this.sliderTickSize = config.sliderTickSize;
+    this.sliderValueWidth = config.sliderValueWidth;
 };
 
 Section.prototype.draw = function() {
-    // if (this.title === 'Population') {
+    // generate and show highlight image
+    var actualWidth = windowWidth * this.relativeWidth;
+    var actualHeight = windowHeight * this.relativeHeight;
+    var sliderValueWidth = this.sliderValueWidth;
 
-    // print(this.highlighted);
-    if (this.highlighted) {
-        fill(200,200,200,200);
-        print(this.width, this.height);
-        print(globals.width, globals.height);
-        rect(this.x, this.y, windowWidth*this.width, windowHeight*this.height);
-    } else {
-        fill(60, 70, 80);
-    }
+    var originX = this.originX;
+    var originY = this.originY;
 
-    // rect(this.x, this.y, this.width, this.height);
+    this.highlightImg = createImg('high26.png');
+    this.highlightImg.style('width', actualWidth + 10 + 'px');
+    this.highlightImg.style('height', actualHeight + 10 + 'px');
+    this.highlightImg.position(this.originX, this.originY);
+
+    console.log(this.originX);
+
+
+    // display title
     fill(255);
-    textSize(26);
-    textAlign(CENTER);
-    print(globals.width*this.width/2);
-    text(this.title, globals.width*this.width/2, this.y + 25);
+    textSize(36);
+    textAlign(CORNER);
+    rectMode(CORNER);
+    text(this.title, this.originX+5, this.originY+30);
+
+    // display button
+    this.actionButton = createButton(this.buttonLabel);
+    // button aligns to the right
+    // buttonX = width of section - width of button
+    var buttonXpos = actualWidth - this.actionButton.width;
+    this.actionButton.position(this.originX + buttonXpos, this.originY+30);
+    this.actionButton.mouseClicked(this.buttonAction);
+    this.actionButton.style('color', 'orange');
+
+    // display slider, with title and value
     textSize(16);
+    fill(0);
+    var sliderWidth = 100;
+    var sliderXpos = actualWidth - sliderWidth -
+        this.sliderValueWidth;
+    text(this.sliderLabel, sliderXpos-70, this.originY+20);
+    var slider = createSlider(this.sliderMin, this.sliderMax,
+        this.sliderInitialValue, this.sliderTickSize );
+    slider.position(sliderXpos, this.originY);
+    slider.style('width', sliderWidth+'px');
+    slider.style('margin', '0');
+    // this.slider_value = slider.value();
+    // text(this.slider_value, globals.width * this.width -25, this.originY+20);
+    // slider.(print(slider.value()));
+    slider.changed(showSliderValue);
+    showSliderValue();
 
-    // genPopBtn = createButton(this.buttonLabel);
-    // genPopBtn.position(this.x + 65, this.y + 45);
-    // genPopBtn.mouseClicked(doPop);
-
-    // butt = this.buttonName;
-    // butt = createButton(this.buttonLabel);
-    // butt.position(this.x + this.buttonX, this.y + this.buttonY);
-    // // butt.position(this.y + buttonY);
-    // butt.mouseClicked(this.buttonFunc);
+    function showSliderValue() {
+        // overwrite blank box
+        fill('#774');
+        // fill(100);
+        rect( originX + actualWidth-sliderValueWidth, originY+5, 50, 25);
+        fill(0);
+        text(slider.value(), originX + actualWidth-sliderValueWidth+5, originY +20);
+    }
 };
 
 Section.prototype.clear = function(head=false) {
@@ -59,5 +95,6 @@ Section.prototype.clear = function(head=false) {
     }
 
     fill(150,150,150,150);
-    rect(this.x + xClear, this.y + yClear, heightClear, this.width);
+    rect(this.originX + xClear, this.originY + yClear, heightClear, this.width);
 };
+
