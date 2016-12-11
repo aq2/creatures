@@ -1,4 +1,4 @@
-var globals = {
+var global = {
     bitlength: 10,                  // number of creature segments
     populationSize: 10,             // number of creatures in population
     creatures: [],                  // array to store our population
@@ -6,14 +6,18 @@ var globals = {
     mummy: -1,                      // array index of first parent
     daddy: -1,                      // array index of second parent
     locus: -1,                      // crossover segment
-    firstRun: true                  // true if first time run
+    firstRun: true,                 // true if first time run
+    sliderWidth: 100,               // size of slider in pixels
+    iteration: 0,                   // how many creature generations
+    meanFitnesses: [],              // average fitness for each iterations
+    bestFitnesses: []               // best fitness for each iteration
 };
 
 // setup and draw blank canvas and define colours
 function setup() {
-    hImg = createImage('highlight.png');
-    // globals.width = windowWidth-5;
-    // globals.height = windowHeight-5;
+    // hImg = createImage('highlight.png');
+    // global.width = windowWidth-5;
+    // global.height = windowHeight-5;
     // defineColours();
     var rhino = color(60, 70, 80);
     var celery = color(200, 200, 80);

@@ -1,40 +1,29 @@
 var Section = function(config) {
-    this.originX = config.originX;
-    console.log(this.originX);
-    this.originY = config.originY;
-    this.title = config.title;
-    this.relativeWidth = config.relativeWidth;
-    this.relativeHeight = config.relativeHeight;
-    // this.backgroundColour = config.backgroundColour;
-    // this.buttonName = this.title + 'Btn';
-    this.buttonLabel = config.buttonLabel;
-    this.buttonX = this.originX + config.buttonX;
-    this.buttonY = this.originY + config.buttonY;
-    this.buttonAction = config.buttonAction;
-    this.sliderLabel = config.sliderLabel;
-    this.sliderMin = config.sliderMin;
-    this.sliderMax = config.sliderMax;
-    this.sliderInitialValue = config.sliderInitialValue;
-    this.sliderTickSize = config.sliderTickSize;
-    this.sliderValueWidth = config.sliderValueWidth;
+    this.originX = config.originX;                  // top left corner x
+    this.originY = config.originY;                  // top left corner y
+    this.title = config.title;                      // section title
+    this.relativeWidth = config.relativeWidth;      // fraction of page
+    this.relativeHeight = config.relativeHeight;    // ditto
+    this.buttonLabel = config.buttonLabel;          // button text
+    this.buttonAction = config.buttonAction;        // function called by button
+    this.sliderLabel = config.sliderLabel;          // slider text
+    this.sliderMin = config.sliderMin;              // min value of slider
+    this.sliderMax = config.sliderMax;              // max value of slider
+    this.sliderInitVal = config.sliderInitVal;      // default value
+    this.sliderTickSize = config.sliderTickSize;    // smallest slider delta
+    // this.sliderValue = 0;                           // init current slider value
 };
 
 Section.prototype.draw = function() {
+    var self = this;
+    this.actualWidth = windowWidth * this.relativeWidth;
+    this.actualHeight = windowHeight * this.relativeHeight;
+
     // generate and show highlight image
-    var actualWidth = windowWidth * this.relativeWidth;
-    var actualHeight = windowHeight * this.relativeHeight;
-    var sliderValueWidth = this.sliderValueWidth;
-
-    var originX = this.originX;
-    var originY = this.originY;
-
     this.highlightImg = createImg('high26.png');
-    this.highlightImg.style('width', actualWidth + 10 + 'px');
-    this.highlightImg.style('height', actualHeight + 10 + 'px');
+    this.highlightImg.style('width', this.actualWidth + 10 + 'px');
+    this.highlightImg.style('height', this.actualHeight + 10 + 'px');
     this.highlightImg.position(this.originX, this.originY);
-
-    console.log(this.originX);
-
 
     // display title
     fill(255);
@@ -45,38 +34,38 @@ Section.prototype.draw = function() {
 
     // display button
     this.actionButton = createButton(this.buttonLabel);
-    // button aligns to the right
-    // buttonX = width of section - width of button
-    var buttonXpos = actualWidth - this.actionButton.width;
-    this.actionButton.position(this.originX + buttonXpos, this.originY+30);
+    // button aligns to the right, buttonX = width of section - width of button
+    var buttonX = this.actualWidth - this.actionButton.width;
+    this.actionButton.position(this.originX + buttonX, this.originY+30);
     this.actionButton.mouseClicked(this.buttonAction);
-    this.actionButton.style('color', 'orange');
 
-    // display slider, with title and value
-    textSize(16);
+    // display slider
+    // slider label text
+    var sliderX = this.actualWidth - global.sliderWidth - 40;  // 40 = width of value
     fill(0);
-    var sliderWidth = 100;
-    var sliderXpos = actualWidth - sliderWidth -
-        this.sliderValueWidth;
-    text(this.sliderLabel, sliderXpos-70, this.originY+20);
+    textSize(16);
+    text(this.sliderLabel, sliderX-70, this.originY+20);  // magic numbers
+    // slider itself
     var slider = createSlider(this.sliderMin, this.sliderMax,
-        this.sliderInitialValue, this.sliderTickSize );
-    slider.position(sliderXpos, this.originY);
-    slider.style('width', sliderWidth+'px');
+        this.sliderInitVal, this.sliderTickSize);
+    slider.position(sliderX, this.originY);
+    slider.style('width', global.sliderWidth+'px');
     slider.style('margin', '0');
-    // this.slider_value = slider.value();
-    // text(this.slider_value, globals.width * this.width -25, this.originY+20);
-    // slider.(print(slider.value()));
+    // slider value
+    this.sliderValue = showSliderValue();
     slider.changed(showSliderValue);
-    showSliderValue();
 
     function showSliderValue() {
         // overwrite blank box
         fill('#774');
-        // fill(100);
-        rect( originX + actualWidth-sliderValueWidth, originY+5, 50, 25);
+        // self refers to 'this' in the outer function
+        rect(self.originX + self.actualWidth-40, self.originY+5, 50, 25);
+        // write current value
         fill(0);
-        text(slider.value(), originX + actualWidth-sliderValueWidth+5, originY +20);
+        textSize(16);
+        text(slider.value(), self.originX + self.actualWidth-40+5, self.originY +20);
+        self.sliderValue = slider.value();
+        return slider.value();
     }
 };
 
