@@ -4,7 +4,7 @@
 var wide = window.innerWidth;
 var high = window.innerHeight;
 
-// setup the population section
+// setup the popSec section
 var popSketch = function (p) {
     p.setup = function () {
         p.createCanvas(wide/3, high/2-3);
@@ -18,7 +18,7 @@ var popSketch = function (p) {
 
     p.draw = function () {
 
-        genPopBtn = p.createButton('Create random population');
+        genPopBtn = p.createButton('Create random popSec');
         genPopBtn.position(5,35);
         var doPop = function (p) {
             alert('foo');

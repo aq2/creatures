@@ -1,50 +1,49 @@
-var population = new Section({
-    originX: 0,
-    originY: 0,
-    title: 'Population',
-    relativeWidth: 1/3,
-    relativeHeight: 1/2,
-    buttonLabel: 'generate random population',
-    buttonAction: doPop,
-    sliderLabel: 'P(green)',
-    sliderMin: 0.1,
-    sliderMax: 0.7,
-    sliderInitVal: 0.3,
-    sliderTickSize: 0.1
-});
+function population() {
+    global.popSec = new Section({
+        originX: 0,
+        originY: 0,
+        title: 'Population',
+        relativeWidth: 1/3,
+        relativeHeight: 1/2,
+        buttonLabel: 'generate random population',
+        buttonAction: doPop,
+        sliderLabel: 'P(green)',
+        sliderMin: 0.1,
+        sliderMax: 0.7,
+        sliderInitVal: 0.3,
+        sliderTickSize: 0.1
+    });
 
+}
 
 function doPop() {
-    // population.actionButton.hide();
-    print(population.title);
-    print(population.sliderValue);
-
-    // print(global.firstRun);
-    if (global.firstRun === false) {
-        if (!confirm("This will start again from scratch - are you sure?")) {
-            return;
-        }
-    }
-
     generateRandomCreatures();
     displayPopulation();
+    // global.popSec.actionButton.hide();
+    // global.popSec.slider.hide();
+    global.popSec.hideButton();
 
     // tournament();
-    // var tournament = new Section({
-    //     originX: 350,
-    //     originY: 0,
-    //     highlighted: true,
-    //     title: 'Tournament',
-    //     width: 800,
-    //     height: 450,
-    //     buttonX: this.originX + 200,
-    //     buttonY: this.originY + 30
-// });
 
-    global.firstRun = false;
-    // population.highlightImg.hide();
-    // tourney();
-    // tournament.draw();
+    global.tourneySec = new Section({
+        originX: windowWidth/3,
+        originY: 0,
+        title: 'Tournament',
+        relativeWidth: 2/3,
+        relativeHeight: 1/2,
+        buttonLabel: 'fight it out',
+        buttonAction: fightItOut,
+        sliderLabel: 'tournament size',
+        sliderMin: 2,
+        sliderMax: global.populationSize-1,
+        sliderInitVal: 3,
+        sliderTickSize: 1
+    });
+
+    global.tourneySec.draw();
+    // global.tourneySec.hideButton();
+
+
 }
 
 
@@ -54,52 +53,50 @@ function generateRandomCreatures() {
         var chromosome = '';
         for (var j=0; j<global.bitlength; j++) {
             // generate random gene depending on P(green)
-            population.sliderValue > random() ? gene = 1 : gene = 0;
+            global.popSec.sliderValue > random() ? gene = 1 : gene = 0;
             chromosome += gene;
         }
         global.creatures[i] = new Creature(chromosome);
     }
 }
 
+
 function displayPopulation() {
+    var g = global;             // saves typing
+    var popS = g.popSec;
     // first, 'clear' the display
     noStroke();
-    // fill('#774');
     fill('#974');
     rectMode(CORNER);
-    rect(population.originX, population.originY + 60,
-        population.actualWidth, population.actualHeight-60);
+    rect(popS.originX, popS.originY + 60, popS.secWidth, popS.secHeight-60);
 
-    // loop through population, drawing creatures and calculating fitness stuff
+    // loop through popSec, drawing creatures and calculating fitness stuff
     // maybe should do each in separate loop, but let's go wild...
     var totalFitness = 0;
     var bestFitness = -1;
     fill(0);
     textSize(22);
     for (var i=0; i<global.populationSize; i++) {
-        // todo - magic numbers?
-
-        // global.creatures[i].draw(20, 100 + i*32);
-        global.creatures[i].draw(population.originX + 20, population.originY + 100 + i*32);
-
-        var fitness = global.creatures[i].getFitness();
-        text('f('+i+') '+ fitness, 240, 108 + i*32);
+        g.creatures[i].draw(popS.originX + 20, popS.originY + 100 + i*32);
+        var fitness = g.creatures[i].getFitness();
+        text('f('+i+'): '+ fitness, 240, 108 + i*32);
         totalFitness += fitness;
         if (fitness > bestFitness) {
             bestFitness = fitness;
         }
     }
-    var meanFitness = totalFitness / global.populationSize;
+    var meanFitness = totalFitness / g.populationSize;
     // add results for this iteration/generation to array
-    global.meanFitnesses[global.iteration] = meanFitness;  // todo or push?
-    global.bestFitnesses[global.iteration] = bestFitness;
+    g.meanFitnesses[g.iteration] = meanFitness;  // todo or push?
+    g.bestFitnesses[g.iteration] = bestFitness;
 
     // update info bar?
     updateInfo();
-
 }
 
+
 function updateInfo() {
+    var g = global;
     // clear bar
     fill('#b000b5');
     rect(0, windowHeight*5/6, windowWidth, windowHeight/6);
@@ -121,12 +118,44 @@ function updateInfo() {
     rect(400, windowHeight*5/6 + 75, 50, 60);
     // write new values
     fill(0);
-    text(global.iteration, 400, windowHeight*5/6 + 90);
-    text(global.meanFitnesses[global.iteration], 400, windowHeight*5/6 + 110);
-    text(global.bestFitnesses[global.iteration], 400, windowHeight*5/6 + 130);
+    text(g.iteration, 400, windowHeight*5/6 + 90);
+    text(g.meanFitnesses[g.iteration], 400, windowHeight*5/6 + 110);
+    text(g.bestFitnesses[g.iteration], 400, windowHeight*5/6 + 130);
 
     // do chart
-    // should i clear it first - yep, because scale should change - scale()?
     fill('#474');
-    rect(500, windowHeight*5/6, )
+    rect(500, windowHeight*5/6, windowWidth-500, windowHeight/6);
+    // draw axes
+    stroke(0);
+    strokeWeight(5);
+    var chartOriginX = windowWidth/2;
+    var chartOriginY = windowHeight - 20;
+    var chartMaxX = windowWidth - 50;
+    var chartMaxY = windowHeight*5/6 + 10;
+    line(chartOriginX, chartOriginY, chartMaxX, chartOriginY);  // x axis
+    line(chartOriginX, chartOriginY, chartOriginX, chartMaxY);  // y axis
+    fill(0);
+    strokeWeight(0);
+    text('generations', chartMaxX-100, chartOriginY-10);
+    text('fitness', chartOriginX-70, windowHeight*11/12);
+
+    // plot
+    for (var i=1; i<g.iteration+1; i++) {
+        // map Y  mean values
+        var mY = map(g.meanFitnesses[i], 0, max(g.bestFitnesses)+1,
+            chartOriginY, chartMaxY);
+        var bY = map(g.bestFitnesses[i], 0, max(g.bestFitnesses)+1,
+            chartOriginY, chartMaxY);
+        // map X
+        var xVal = map(i, 1, g.iteration+5, chartOriginX, chartMaxX);
+        // plot first point on y axis
+        // print(i, xVal, mY);
+        // todo replace m and b with coloured ellipses
+        // add 'mean' and 'best' in same colours to y axis
+        text('m', xVal, mY);
+        text('b', xVal, bY);
+        // subsequent points
+
+    }
+
 }

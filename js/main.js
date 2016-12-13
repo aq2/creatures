@@ -1,16 +1,16 @@
 var global = {
     bitlength: 10,                  // number of creature segments
-    populationSize: 10,             // number of creatures in population
-    creatures: [],                  // array to store our population
+    populationSize: 10,             // number of creatures in popSec
+    creatures: [],                  // array to store our popSec
     // initialGreenChance: 0.2,     // probability of green segments
     mummy: -1,                      // array index of first parent
     daddy: -1,                      // array index of second parent
     locus: -1,                      // crossover segment
-    firstRun: true,                 // true if first time run
+    // firstRun: true,                 // true if first time run
     sliderWidth: 100,               // size of slider in pixels
-    iteration: 0,                   // how many creature generations
-    meanFitnesses: [],              // average fitness for each iterations
-    bestFitnesses: []               // best fitness for each iteration
+    iteration: 1,                   // how many creature generations
+    meanFitnesses: [-1],              // average fitness for each iterations
+    bestFitnesses: [-1]               // best fitness for each iteration
 };
 
 // setup and draw blank canvas and define colours
@@ -32,13 +32,14 @@ function setup() {
     // fill(rhino);
     // rect(0,0, 100, 200);
 
-    population.draw();
+    population();
+    // popSec.draw();
 
 }
 
 function draw() {
 
-    // var population = new Section({
+    // var popSec = new Section({
     //     originX: 0,
     //     originY: 0,
     //     highlighted: true,
