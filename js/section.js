@@ -87,16 +87,16 @@ Section.prototype.clear = function(head=false) {
     // either overdraw a rectangle, or hide with css...
     xClear = 0;
     yClear = 80;
-    heightClear = 350;
-    widthClear = this.width;
+        heightClear = this.secHeight-100;
+    // widthClear = this.width;
 
     if (head) {
         xClear = 0;
         yClear = 0;
-        heightClear = this.height;
+        heightClear = this.secHeight;
     }
 
-    fill(150,150,150,150);
-    rect(this.originX + xClear, this.originY + yClear, heightClear, this.width);
+    fill(150,150,150);
+    rect(this.originX, this.originY + yClear, this.secWidth, heightClear);
 };
 

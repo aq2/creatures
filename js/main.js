@@ -1,10 +1,16 @@
 var global = {
     bitlength: 10,                  // number of creature segments
     populationSize: 10,             // number of creatures in popSec
-    creatures: [],                  // array to store our popSec
+    creatures: [],                  // array of creatures in the population
     // initialGreenChance: 0.2,     // probability of green segments
+
     mummy: -1,                      // array index of first parent
     daddy: -1,                      // array index of second parent
+    babies: [],                     // two element array of creatures or indices?
+
+    parents: [],                    // two element array of creatures
+
+
     locus: -1,                      // crossover segment
     // firstRun: true,                 // true if first time run
     sliderWidth: 100,               // size of slider in pixels

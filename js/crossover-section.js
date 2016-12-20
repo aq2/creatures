@@ -58,19 +58,19 @@ function crossEmOver() {
     // make baby1 from mummy tail and daddy head
     var mummyTail = mummy.chromosome.substring(0, locus);
     var daddyHead = daddy.chromosome.substring(locus);
-    var baby1 = new Creature(mummyTail + daddyHead);
+    g.baby1 = new Creature(mummyTail + daddyHead);
 
 
     // make baby2 from daddy tail and mummy head
     var daddyTail = daddy.chromosome.substring(0, locus);
     var mummyHead = mummy.chromosome.substring(locus);
-    var baby2 = new Creature(daddyTail + mummyHead);
+    g.baby2 = new Creature(daddyTail + mummyHead);
 
     fill(0);
     text('baby1', cS.originX+50, cS.originY+180);
-    baby1.draw(cS.originX+150, cS.originY+180);
+    g.baby1.draw(cS.originX+150, cS.originY+180);
     text('baby2', cS.originX+50, cS.originY+210);
-    baby2.draw(cS.originX+150, cS.originY+210);
+    g.baby2.draw(cS.originX+150, cS.originY+210);
 
     mutation();
 }

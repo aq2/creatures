@@ -1,5 +1,6 @@
-function Creature(chromosome) {
+function Creature(chromosome, ID) {
     this.chromosome = chromosome;  // eg '10011100'
+    this.ID;
 }
 
 // simple calculate fitness function - a 1 allele increases fitness by 1
@@ -33,4 +34,19 @@ Creature.prototype.draw = function(x, y, start=0, stop=global.bitlength) {
         }
     }
     fill(0);
+};
+
+// mutate random allele in chromosome
+Creature.prototype.mutate = function() {
+    // which 'bit' do we mutate?
+    var mutantAllele = round(random(0, global.bitlength));
+
+    // mutate by flipping the bit
+    var unmutated = this.chromosome.charAt(mutantAllele);
+    var mutantGene =  unmutated === '0' ? '1' : '0';
+
+    // rebuild mutated chromosome
+    var tailChromo = this.chromosome.substring(0, mutantAllele);
+    var headChromo = this.chromosome.substring(mutantAllele+1);
+    this.chromosome = tailChromo + mutantGene + headChromo;
 };
