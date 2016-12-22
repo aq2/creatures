@@ -13,7 +13,7 @@ var Section = function(config) {
     this.sliderTickSize = config.sliderTickSize;    // smallest slider delta
     // this.sliderValue = 0;                        // init current slider value
     this.actionButton = 0;
-    this.draw();
+    // this.draw();
 };
 
 Section.prototype.draw = function() {

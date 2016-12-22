@@ -1,4 +1,4 @@
-function population() {
+function populate() {
     global.popSec = new Section({
         originX: 0,
         originY: 0,
@@ -6,7 +6,7 @@ function population() {
         relativeWidth: 1 / 3,
         relativeHeight: 1 / 2,
         buttonLabel: 'generate random population',
-        buttonAction: doPop,
+        buttonAction: doHopulate,
         sliderLabel: 'P(green)',
         sliderMin: 0.1,
         sliderMax: 0.7,
@@ -14,39 +14,54 @@ function population() {
         sliderTickSize: 0.1
     });
 
+    global.popSec.draw();
 
-    function doPop() {
-        generateRandomCreatures();
-        displayPopulation();
-        // global.popSec.actionButton.hide();
-        // global.popSec.slider.hide();
-        global.popSec.hideButton();
+    var myCreatures = generateRandomCreatures();
+    return myCreatures;
+}
 
-        // tournament();
+// function displayP() {
+//     displayPop(global.critters);
+// }
 
-        // global.tourneySec = new Section({
-        //     originX: windowWidth / 3,
-        //     originY: 0,
-        //     title: 'Tournament',
-        //     relativeWidth: 2 / 3,
-        //     relativeHeight: 1 / 2,
-        //     buttonLabel: 'fight it out',
-        //     buttonAction: fO,
-        //     sliderLabel: 'tournament size',
-        //     sliderMin: 2,
-        //     sliderMax: global.populationSize - 1,
-        //     sliderInitVal: 3,
-        //     sliderTickSize: 1
-        // });
-        //
-        // global.tourneySec.draw();
-        // // global.tourneySec.hideButton();
+function doHopulate() {
+    print('foo');
+    displayPop(global.critters);
+    global.popSec.hideButton();
+    // tournament();
+}
 
+    // // generate array of randomised creatures, and display them
+    // function OdoPopulate() {
+    //     var myCreatures = generateRandomCreatures();
+    //     displayPop(myCreatures);
+    //     global.popSec.hideButton();
+    //     return myCreatures;
+    //     // tournament();
+    //
+    //     // global.tourneySec = new Section({
+    //     //     originX: windowWidth / 3,
+    //     //     originY: 0,
+    //     //     title: 'Tournament',
+    //     //     relativeWidth: 2 / 3,
+    //     //     relativeHeight: 1 / 2,
+    //     //     buttonLabel: 'fight it out',
+    //     //     buttonAction: fO,
+    //     //     sliderLabel: 'tournament size',
+    //     //     sliderMin: 2,
+    //     //     sliderMax: global.populationSize - 1,
+    //     //     sliderInitVal: 3,
+    //     //     sliderTickSize: 1
+    //     // });
+    //     //
+    //     // global.tourneySec.draw();
+    //     // // global.tourneySec.hideButton();
+    // }
 
-    }
 
 
     function generateRandomCreatures() {
+        var myCreatures = [];
         for (var i = 0; i < global.populationSize; i++) {
             var gene;
             var chromosome = '';
@@ -55,8 +70,10 @@ function population() {
                 global.popSec.sliderValue > random() ? gene = 1 : gene = 0;
                 chromosome += gene;
             }
-            global.creatures[i] = new Creature(chromosome, j);
+            // global.creatures[i] = new Creature(chromosome, j);
+            myCreatures[i] = new Creature(chromosome, j);
         }
+        return myCreatures;
     }
 
 
@@ -159,4 +176,37 @@ function population() {
 
     }
 
-}
+    function displayPop(creatures) {
+        var g = global;             // saves typing
+        var popS = g.popSec;
+        // first, 'clear' the display
+        noStroke();
+        fill('#974');
+        rectMode(CORNER);
+        rect(popS.originX, popS.originY + 60, popS.secWidth, popS.secHeight - 60);
+
+        // loop through popSec, drawing creatures and calculating fitness stuff
+        // maybe should do each in separate loop, but let's go wild...
+        var totalFitness = 0;
+        var bestFitness = -1;
+        fill(0);
+        textSize(22);
+        for (var i = 0; i < global.populationSize; i++) {
+            creatures[i].draw(popS.originX + 20, popS.originY + 100 + i * 32);
+            var fitness = creatures[i].getFitness();
+            text('f(' + i + '): ' + fitness, 240, 108 + i * 32);
+            totalFitness += fitness;
+            if (fitness > bestFitness) {
+                bestFitness = fitness;
+            }
+        }
+        var meanFitness = totalFitness / g.populationSize;
+        // add results for this iteration/generation to array
+        g.meanFitnesses[g.iteration] = meanFitness;  // todo or push?
+        g.bestFitnesses[g.iteration] = bestFitness;
+
+        // update info bar?
+        updateInfo();
+    }
+
+

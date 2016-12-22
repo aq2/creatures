@@ -10,7 +10,6 @@ var global = {
 
     parents: [],                    // two element array of creatures
 
-
     locus: -1,                      // crossover segment
     // firstRun: true,                 // true if first time run
     sliderWidth: 100,               // size of slider in pixels
@@ -21,27 +20,58 @@ var global = {
 
 // setup and draw blank canvas and define colours
 function setup() {
-    // hImg = createImage('highlight.png');
-    // global.width = windowWidth-5;
-    // global.height = windowHeight-5;
-    // defineColours();
-    var rhino = color(60, 70, 80);
-    var celery = color(200, 200, 80);
-    var black = color(0);
-    var white = color(255);
 
+    noStroke();
     rectMode(CORNER);
     createCanvas(windowWidth-5, windowHeight-5);
-    noStroke();
 
-    // // 'header'
-    // fill(rhino);
-    // rect(0,0, 100, 200);
+    // let''s kick things by generating a population
+    // -> see population-section.js
+    // population();
 
-    population();
-    // popSec.draw();
+    // creatures = population();
+    // parents = tournament(creatures);
+    // babies = crossover(parents);
+    // mutants = mutation(babies);
+    // newCreatures = replacement(creatures, babies)
+    // man that is lovely!
+
+
+    global.critters = populate();
+    print(global.critters);
+    // tournament();
+
+    // var promise = new Promise(function(res, rej) {
+    //     //
+    // });
+    //
+    // var greetingPromise = sayHello();
+    // greetingPromise.then(function(greeting) {
+    //     console.log(greeting);    // 'hello world’
+    // });
+    //
+    //
+    // var critterPromise = doPopulate();
+    // critterPromise.then(function(critters) {
+    //     print(critters);
+    // });
+
+
+
+    // popSec = new Section
+
+
+    // while (critters.length > 0){
+    //     print('c ' + critters);
+    // }
+
 
 }
+
+    function sayHello() {
+         return 'hello';
+    }
+
 
 function draw() {
 
